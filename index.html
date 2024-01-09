@@ -1,0 +1,195 @@
+<div id = 'gameDiv' style='display:none;'>
+<canvas id="ctx" width="760" height="484" style="border:1px solid #000000;"></canvas>
+</div>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<body vlink = 'blue'>
+
+<div id = 'signDiv' style='display:inline-block;'>
+	<p id = 'heading'><b><u>Club Penguin United Armies | Login</u></b></p>
+	Username: <input id = 'signDiv-username' type = 'text'></input><br><br>
+	Password: <input id = 'signDiv-password' type = 'password'></input><br>
+	<input type = 'button' value = 'Sign In' id = 'signDiv-signIn'></input><br>
+	<a id = 'signDiv-signUp' href='javascript:;'>Don't have an account yet? Click here to create one.</a>
+</div>
+
+<script>
+	// Sign In
+	
+	var sign_status = false;
+
+	var signDiv = document.getElementById('signDiv');
+	var signDivUsername = document.getElementById('signDiv-username');
+	var signDivPassword = document.getElementById('signDiv-password');
+	var signDivSignIn = document.getElementById('signDiv-signIn');
+	var signDivSignUp = document.getElementById('signDiv-signUp');
+	var heading = document.getElementById('heading');
+
+	signDivSignIn.onclick = function() {
+		if(signDivSignIn.value === 'Sign In') {
+			socket.emit('signIn', {username: signDivUsername.value, pass: signDivPassword.value});
+		} else {
+			socket.emit('signUp', {username: signDivUsername.value, pass: signDivPassword.value});
+		}
+	}
+
+	signDivSignUp.onclick = function() {
+		if(signDivSignIn.value === 'Sign In') {
+			signDivSignIn.value = 'Sign Up';
+			heading.innerHTML = '<b><u>Club Penguin United Armies | Register</u></b>';
+			signDivSignUp.innerHTML = 'Already have an account? Click here to login.'
+		}
+		else {
+			signDivSignIn.value = 'Sign In';
+			heading.innerHTML = '<b><u>Club Penguin United Armies | Login</u></b>';
+			signDivSignUp.innerHTML = "Don't have an account yet? Click here to create one.";
+		}
+	}
+	
+	// Game
+    var ctx = document.getElementById("ctx").getContext("2d");
+    ctx.font = '30px Arial';
+   
+    var socket = io();
+	
+	socket.on('signInResponse', function(data) {
+		if(data.success == true) {
+			signDiv.style.display = 'none';
+			gameDiv.style.display = 'inline-block';
+		}
+		else {
+			alert('Sign in unsuccessful.');
+		}
+	});
+
+	socket.on('signUpResponse', function(data) {
+		if(data.success == true) {
+			alert('Sign up successful.');
+		}
+		else {
+			alert('Sign up unsuccessful.');
+		}
+	});
+	
+	var images = preload_images();
+	var map_open = false;
+       
+    socket.on('player_data',function(data){
+		draw_room(data.place);
+        for(var i = 0 ; i < data.pack.length; i++)
+            draw_penguin(data.pack[i].look, data.pack[i].x, data.pack[i].y, data.pack[i].army);
+		draw_chatbar();
+		draw_map();
+    });
+	
+	function draw_map() {
+		if(map_open == false) {
+			ctx.drawImage(images.map_unselected, 18, 415);
+			document.body.style.cursor = "default";
+		} else {
+			ctx.drawImage(images.map_selected, 18, 415);
+			document.body.style.cursor = "pointer";
+		}
+	}
+	
+	function draw_chatbar() {
+		ctx.drawImage(images.chatbar, 96, 442);
+	}
+	
+	function draw_penguin(look, x, y, army) {
+		if(look == 1) ctx.drawImage(images.penguin1, x, y);
+		if(look == 2) ctx.drawImage(images.penguin2, x, y);
+		if(look == 3) ctx.drawImage(images.penguin3, x, y);
+		if(look == 4) ctx.drawImage(images.penguin4, x, y);
+		if(look == 5) ctx.drawImage(images.penguin5, x, y);
+		if(look == 6) ctx.drawImage(images.penguin6, x, y);
+		if(look == 7) ctx.drawImage(images.penguin7, x, y);
+		if(look == 8) ctx.drawImage(images.penguin8, x, y);
+		if(look == 9) ctx.drawImage(images.penguin9, x, y);
+		if(look == 10) ctx.drawImage(images.penguin10, x, y);
+		if(look == 11) ctx.drawImage(images.penguin11, x, y);
+		if(look == 12) ctx.drawImage(images.penguin12, x, y);
+		if(look == 13) ctx.drawImage(images.penguin13, x, y);
+		if(look == 14) ctx.drawImage(images.penguin14, x, y);
+		if(look == 15) ctx.drawImage(images.penguin15, x, y);
+		if(look == 16) ctx.drawImage(images.penguin16, x, y);
+	}
+	
+	function draw_room(obj) {
+		switch(obj) {
+			case 'town':
+				ctx.drawImage(images.town, 0, 0);
+				break;
+		}
+	}
+	
+	function preload_images() {
+		var images = {};
+		images.town = new Image();
+		images.town.src = '/client/town.png';
+		images.penguin1 = new Image();
+		images.penguin1.src = '/client/penguin/noarmy/penguin1.png';
+		images.penguin2 = new Image();
+		images.penguin2.src = '/client/penguin/noarmy/penguin2.png';
+		images.penguin3 = new Image();
+		images.penguin3.src = '/client/penguin/noarmy/penguin3.png';
+		images.penguin4 = new Image();
+		images.penguin4.src = '/client/penguin/noarmy/penguin4.png';
+		images.penguin5 = new Image();
+		images.penguin5.src = '/client/penguin/noarmy/penguin5.png';
+		images.penguin6 = new Image();
+		images.penguin6.src = '/client/penguin/noarmy/penguin6.png';
+		images.penguin7 = new Image();
+		images.penguin7.src = '/client/penguin/noarmy/penguin7.png';
+		images.penguin8 = new Image();
+		images.penguin8.src = '/client/penguin/noarmy/penguin8.png';
+		images.penguin9 = new Image();
+		images.penguin9.src = '/client/penguin/noarmy/penguin9.png';
+		images.penguin10 = new Image();
+		images.penguin10.src = '/client/penguin/noarmy/penguin10.png';
+		images.penguin11 = new Image();
+		images.penguin11.src = '/client/penguin/noarmy/penguin11.png';
+		images.penguin12 = new Image();
+		images.penguin12.src = '/client/penguin/noarmy/penguin12.png';
+		images.penguin13 = new Image();
+		images.penguin13.src = '/client/penguin/noarmy/penguin13.png';
+		images.penguin14 = new Image();
+		images.penguin14.src = '/client/penguin/noarmy/penguin14.png';
+		images.penguin15 = new Image();
+		images.penguin15.src = '/client/penguin/noarmy/penguin15.png';
+		images.penguin16 = new Image();
+		images.penguin16.src = '/client/penguin/noarmy/penguin16.png';
+		
+		images.map_unselected = new Image();
+		images.map_unselected.src = '/client/map_unselected.png';
+		
+		images.map_selected = new Image();
+		images.map_selected.src = '/client/map_selected.png';
+		
+		images.chatbar = new Image();
+		images.chatbar.src = '/client/chatbar.png';
+		
+		return images;
+	}
+
+	document.onkeydown = function(event) {
+		socket.emit('keydown', event.keyCode);
+	}
+	
+	document.onkeyup = function(event) {
+		socket.emit('keyup', event.keyCode);
+	}
+	
+	document.onmousemove = function(event) {
+		if(event.clientX > 20 && event.clientX < 73) {
+			if(event.clientY > 425 && event.clientY < 468) {
+				map_open = true;
+			} else {
+				map_open = false;
+			}
+		} else {
+			map_open = false;
+		}
+	}
+	
+</script>
+</body>
