@@ -1,13 +1,12 @@
 {
   "name": "club-penguin",
   "version": "1.0.0",
-  "description": "",
+  "description": "How to set-up 1. Download the ZIP file of the master branch. 2. Copy it to any directory(preferrably C:\\) 3. Unzip the file 4. Rename your extracted folder to something simpler(example - 'cpps') 5. Open up the cpps folder 6. Download NodeJS (https://nodejs.org/en/) 7. Once the installation is finished, press **Windows Key + R** 8. Type in 'cmd' and hit enter 9. Direct yourself to the cpps folder using the 'cd' command(for me it would be '**cd C:\\cpps\\**') 10. Type in **npm init** and hit enter. 11. Keep pressing enter if it asks you any questions. 12. Type in **npm install express** and hit enter. Wait for the installation to happen. 13. Type in **npm install socket.io** and hit enter. Wait for the installation to happen. 14. Type in **cls** and hit enter. 15. Finally, type in **node game.js** and the command line window should prompt you with a 'Server started.' message. 16. Awesome! Open up a browser and go to **localhost:2000** (Remember you can only access this URL from your computer as you are hosting  the server so everything is safe!)",
   "main": "game.js",
   "dependencies": {
-    "express": "^4.17.1",
-    "socket.io": "^2.2.0"
+    "express": "^4.18.3",
+    "socket.io": "^2.5.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
